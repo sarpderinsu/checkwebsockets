@@ -5,11 +5,16 @@
 </template>
 
 <script>
+
 export default {
     setup() {
-        Echo.channel('something').listen('BroadcastingEvent', (e) => {
-            console.log(e);
-        });
-    }
+        // Echo.channel('lighthouse-subscription').listen('*', (e) => {
+        //     console.log(e);
+        // })
+
+        return {
+
+        }
+    },
 }
 </script>

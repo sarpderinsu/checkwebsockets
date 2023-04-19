@@ -1,0 +1,21 @@
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    post(id: ID @eq): Post @find
+    posts: [Post!]! @all
+}
+
+type Mutation {
+    updatePost(id: ID! @eq text: String!): Post @broadcast(subscription: "postUpdated") @update
+}
+
+type Subscription {
+    postUpdated: Post
+}
+
+type Post {
+    id: ID!
+    text: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
