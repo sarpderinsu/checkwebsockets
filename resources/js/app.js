@@ -1,7 +1,8 @@
 import {createApp, h} from 'vue';
 import App from "./App.vue";
 import {provideApolloClient} from "@vue/apollo-composable";
-import PusherLink from "./apollo";
+import { createApolloProvider } from '@vue/apollo-option'
+import PusherLink from "./pusher_link";
 import {ApolloClient, InMemoryCache} from "@apollo/client/core";
 import {gql} from "apollo-boost";
 import {createHttpLink} from "apollo-link-http";
@@ -36,12 +37,20 @@ const link = ApolloLink.from([
     createHttpLink({uri: `http://localhost/graphql`})
 ]);
 
-const cache = new InMemoryCache()
-
 const client = new ApolloClient({
     link,
-    cache
+    cache: new InMemoryCache()
 });
+
+const apolloProvider = createApolloProvider({
+    defaultClient: client,
+    defaultOptions: {
+        $query: {
+            loadingKey: 'loading',
+            fetchPolicy: 'cache-and-network',
+        },
+    },
+})
 
 client
 .subscribe({
@@ -62,5 +71,7 @@ const app = createApp({
     },
     render: () => h(App),
 });
+
+app.use(apolloProvider)
 
 app.mount('#app');
